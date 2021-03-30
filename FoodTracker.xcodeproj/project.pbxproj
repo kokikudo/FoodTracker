@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FDB4BBBC2612ADEA00390285 /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB4BBBB2612ADEA00390285 /* RatingControl.swift */; };
 		FDDD469A26115BDB0062C0AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD469926115BDB0062C0AD /* AppDelegate.swift */; };
 		FDDD469C26115BDB0062C0AD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD469B26115BDB0062C0AD /* SceneDelegate.swift */; };
 		FDDD469E26115BDB0062C0AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD469D26115BDB0062C0AD /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FDB4BBBB2612ADEA00390285 /* RatingControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 		FDDD469626115BDB0062C0AD /* FoodTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDDD469926115BDB0062C0AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FDDD469B26115BDB0062C0AD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +42,7 @@
 		FDDD468D26115BDB0062C0AD = {
 			isa = PBXGroup;
 			children = (
+				FDB4BBBB2612ADEA00390285 /* RatingControl.swift */,
 				FDDD469826115BDB0062C0AD /* FoodTracker */,
 				FDDD469726115BDB0062C0AD /* Products */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDB4BBBC2612ADEA00390285 /* RatingControl.swift in Sources */,
 				FDDD469E26115BDB0062C0AD /* ViewController.swift in Sources */,
 				FDDD469A26115BDB0062C0AD /* AppDelegate.swift in Sources */,
 				FDDD469C26115BDB0062C0AD /* SceneDelegate.swift in Sources */,
