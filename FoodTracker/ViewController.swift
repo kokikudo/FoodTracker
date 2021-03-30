@@ -12,11 +12,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     @IBOutlet weak var mealName: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var ratingControl: RatingControl!
     
     //4
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         // textFieldの処理をデリゲートで対応
         nameTextField.delegate = self
     }
@@ -61,10 +62,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         photoImageView.image = selectedImage
         // imagePickerを閉じる
         dismiss(animated: true, completion: nil)
-    }
-    //setDefaultLabelTextボタンを押した時に実行
-    @IBAction func setDefaultLabelText(_ sender: UIButton) {
-        mealName.text = "Default Text"
     }
     
 }
