@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MealViewController.swift
 //  FoodTracker
 //
 //  Created by kudo koki on 2021/03/29.
@@ -7,9 +7,8 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // プロパティ
-    @IBOutlet weak var mealName: UILabel!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ratingControl: RatingControl!
@@ -31,7 +30,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
     // textFieldDidEndEditing: textFieldの編集が完了した時に実行
     func textFieldDidEndEditing(_ textField: UITextField) {
-        mealName.text = textField.text
     }
     // 写真タップ時の処理
     @IBAction func selectImageFromPhotoLibrary(_ sender: UITapGestureRecognizer) {
