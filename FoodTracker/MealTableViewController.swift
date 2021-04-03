@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os.log
 
 class MealTableViewController: UITableViewController {
     
@@ -19,18 +20,28 @@ class MealTableViewController: UITableViewController {
         if let sourceViewController = sender.source as? MealViewController,
            let meal = sourceViewController.meal {
             
-            // 追加するセルの行数
-            let newIndexPath = IndexPath(row: meals.count, section: 0)
-            
-            // リストに料理と行数を追加
-            meals.append(meal)
-            tableView.insertRows(at: [newIndexPath], with: .automatic)
+            // 保存時に編集か新規作成かを判断する
+            // 編集の場合はインデックスパスが存在しているのでリストからタップされたことがわかる
+            // インデックスパスがない場合は新規登録
+            // 編集の場合は変更したデータを反映させ、新規登録の場合は追加する
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                meals[selectedIndexPath.row] = meal
+                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+            }
+            else {
+                let newIndexPath = IndexPath(row: meals.count, section: 0)
+                meals.append(meal)
+                tableView.insertRows(at: [newIndexPath], with: .automatic)
+            }
         }
            
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // 左上にEditボタンを設置
+        navigationItem.leftBarButtonItem = editButtonItem
 
         // サンプルデータをロード
         loadSampleMeals()
@@ -71,25 +82,26 @@ class MealTableViewController: UITableViewController {
     }
     
 
-    /*
-    // Override to support conditional editing of the table view.
+    
+    // 編集をサポートするためにオーバーライドされた関数
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
+    
 
-    /*
-    // Override to support editing the table view.
+    
+    // エディットモードの各処理
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
+            // meals内のデータとインデックスを削除
+            meals.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
     /*
     // Override to support rearranging the table view.
@@ -106,15 +118,48 @@ class MealTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        super.prepare(for: segue, sender: sender)
+        
+        // segueのIdentifierによって処理を変える
+        switch segue.identifier ?? "" {
+        case "AddItem":
+            os_log("Adding a new meal.", log: OSLog.default, type: .debug)
+            
+        // 編集の場合
+        case "ShowDetail":
+            
+            // 宛先をビューコントローラに設定
+            guard let mealDetailViewController = segue.destination as? MealViewController
+            else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            // セルを取得
+            guard let selectedMealCell = sender as? MealTableViewCell
+            else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+            }
+            
+            // インデックスパスを取得
+            guard let indexPath = tableView.indexPath(for: selectedMealCell)
+            else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            // タップされた料理データを取得
+            let selectedModel = meals[indexPath.row]
+            mealDetailViewController.meal = selectedModel
+        
+        default:
+            fatalError("Unecpected Seque Identifier; \(String(describing: segue.identifier))")
+        }
     }
-    */
+    
     
     // サンプルデータをアプリに読み込むためのヘルパーメソッド
     private func loadSampleMeals() {
