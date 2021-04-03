@@ -23,6 +23,14 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         // textFieldの処理をデリゲートで対応
         nameTextField.delegate = self
         
+        // 既存の料理を編集する場合、白紙のページに各プロパティの値をセット
+        if let meal = meal {
+            navigationItem.title = meal.name
+            nameTextField.text = meal.name
+            photoImageView.image = meal.photo
+            ratingControl.rating = meal.rating
+        }
+        
         // 料理名を入力するまで「保存ボタン」無効
         updateSaveButtomState()
     }
@@ -98,7 +106,20 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     
     // キャンセルボタンで戻る
     @IBAction func cancel(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
+        
+        // このページを開いたのがUINavigationControllerタイプか確認
+        let isPresentingInAddMealMode = presentingViewController is UINavigationController
+        
+        // UINavigationControllerタイプであればそのまま何も出ず閉じる
+        // そうでなければナビゲーションスタックにプッシュされている（編集している）のでpopViewController()でリストに戻る
+        // このメソッドは、コントローラーをナビゲーションスタックから除外することで編集中の内容をキャンセルしている
+        if isPresentingInAddMealMode {
+            dismiss(animated: true, completion: nil)
+        } else if let owningNavigationController = navigationController {
+            owningNavigationController.popViewController(animated: true)
+        } else {
+            fatalError("The MealViewController is not inside a navigation controller.") 
+        }
     }
     
     // プライベートメソッド
