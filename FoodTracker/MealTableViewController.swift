@@ -33,6 +33,9 @@ class MealTableViewController: UITableViewController {
                 meals.append(meal)
                 tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
+            
+            // データを保存
+            saveMeals()
         }
            
     }
@@ -42,9 +45,14 @@ class MealTableViewController: UITableViewController {
         
         // 左上にEditボタンを設置
         navigationItem.leftBarButtonItem = editButtonItem
-
-        // サンプルデータをロード
-        loadSampleMeals()
+        
+        // 保存されたデータをロード。それ以外の場合はサンプルデータをロード
+        if let savedMeals = loadMeals() {
+            meals += savedMeals
+        } else {
+            // サンプルデータをロード
+            loadSampleMeals()
+        }
     }
 
     // MARK: - Table view data source
@@ -81,43 +89,22 @@ class MealTableViewController: UITableViewController {
         return cell
     }
     
-
-    
     // 編集をサポートするためにオーバーライドされた関数
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
     
-
-    
     // エディットモードの各処理
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // meals内のデータとインデックスを削除
             meals.remove(at: indexPath.row)
+            saveMeals() // データ保存
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
     
     // MARK: - Navigation
 
@@ -184,5 +171,24 @@ class MealTableViewController: UITableViewController {
         
         // mealsに追加
         meals += [meal1, meal2, meal3]
+    }
+    
+    // 料理リストを保存する
+    private func saveMeals() {
+        
+        // 特定のアーカイブにmealsを保存
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
+        
+        // 保存されたかどうかコンソールに表示
+        if isSuccessfulSave {
+            os_log("Meals successfully saved.", log: OSLog.default, type: .debug)
+        } else {
+            os_log("Failed to save meals...", log: OSLog.default, type: .error)
+        }
+    }
+    
+    // 料理リストをロードする
+    private func loadMeals() -> [Meal]? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as?  [Meal]
     }
 }
