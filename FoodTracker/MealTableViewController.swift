@@ -11,6 +11,23 @@ class MealTableViewController: UITableViewController {
     
     // プロパティ
     var meals = [Meal]() // TableViewで表示するのでリストで返す
+    
+    // 追加した料理データをテーブルビューに反映
+    @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
+        
+        // segueのソースをMealViewControllerにダウンキャストし、追加した料理データを定数に格納
+        if let sourceViewController = sender.source as? MealViewController,
+           let meal = sourceViewController.meal {
+            
+            // 追加するセルの行数
+            let newIndexPath = IndexPath(row: meals.count, section: 0)
+            
+            // リストに料理と行数を追加
+            meals.append(meal)
+            tableView.insertRows(at: [newIndexPath], with: .automatic)
+        }
+           
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
